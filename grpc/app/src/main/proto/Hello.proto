@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.apidemo.grpc";
+option java_outer_classname = "HelloProto";
+option objc_class_prefix = "HLW";
+
+package com.apidemo.grpc;
+
+// The request message containing the user's name
+message HelloRequest {
+    // Each message attribute is strongly-typed.
+    // We must assign a tag number.
+    // Each tag number is unique within the message.
+    string name = 1;
+
+    // This defines a strongly typed list of String
+    // repeated string hobbies = 2;
+}
+
+// The response message containing the hello greetings
+message HelloReply {
+    string message = 1;
+}
+
+// Defining a Service. A Service can have multiple RPC operations.
+// The Hello service definition
+service Hello {
+    // Define a RPC operation: sends a hello message
+    rpc SayHello(HelloRequest) returns (HelloReply);
+}
+
+
+
+
