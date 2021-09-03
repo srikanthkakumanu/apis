@@ -1,4 +1,3 @@
-grpc/gradlew
 grpc/app/.project
 grpc/gradle/wrapper/gradle-wrapper.jar
 grpc/app/bin/main/com/apidemo/grpc/HelloClient.class
