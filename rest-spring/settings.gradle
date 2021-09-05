@@ -8,4 +8,4 @@
  */
 
 rootProject.name = 'rest-spring'
-include('app')
+//include('app')
