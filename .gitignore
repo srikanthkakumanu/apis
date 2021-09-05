@@ -33,3 +33,5 @@ grpc/app/.settings/org.eclipse.buildship.core.prefs
 grpc/.settings/org.eclipse.buildship.core.prefs
 grpc/.project
 grpc/app/.classpath
+graphql-dgs
+
