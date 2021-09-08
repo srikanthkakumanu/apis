@@ -21,13 +21,35 @@ Spring along with Java, it also offers excellent support of **Groovy** and **Kot
 - *Care about API design*: The Spring team puts a lot of thought and time into making APIs that are intuitive and that hold up across many versions and many years.
 - *Set high standards for code quality*: The Spring Framework puts a strong emphasis on meaningful, current, and accurate Javadocs and can claim clean code structure with no circular dependencies between packages.
 
-### 2.1 **Spring Context**
+The Spring framework can be considered as a collection of sub-frameworks also called as layers such as Spring Core, Spring AOP, Spring Web MVC, Spring DAO, Spring ORM, Spring Context and Spring WebFlow.
+
+### 2.1 **Spring Core and IoC container**
+
+Spring Core module is the core component of Spring framework and provides **Inversion of Control (IoC) container**.
+
+IoC container does the following:
+
+- Creates the objects, configures, assembles their dependencies and manages their entire life cycle.
+- It uses **Dependency Injection (DI)** to manage the components that makeup the application. It gets the information about the objects from a configuration file(XML) or Java Code or Java Annotations and Java POJO class. These objects are called **Beans**. Since the Controlling of Java objects and their lifecycle is not done by the developers, hence the name **Inversion Of Control (IoC)**.
+
+#### **Inversion of Control (IoC) and Dependency Injection (DI)**
+
+**IoC is also known as dependency injection (DI)**. It is a process whereby objects define their dependencies (that is, the other objects they work with) only through constructor arguments, arguments to a factory method, or properties that are set on the object instance after it is constructed or returned from a factory method. The container then injects those dependencies when it creates the bean. This process is fundamentally the inverse (hence the name, Inversion of Control) of the bean itself controlling the instantiation or location of its dependencies by using direct construction of classes or a mechanism such as the ***Service Locator*** pattern.
+
+There are **two types of Spring IoC Containers**:
+
+**BeanFactory Container**: This is the simplest container providing the basic support for **Dependency Injection (DI)** and it  is defined by `org.springframework.beans.factory.BeanFactory` interface. The BeanFactory and related interfaces, such as *BeanFactoryAware*, *InitializingBean*, *DisposableBean*, are still present in Spring for the purpose of backward compatibility with a large number of third-party frameworks that integrate with Spring.
+
+**ApplicationContext Container**: This container adds more enterprise specific functionality such as the ability to resolve textual messages from a properties file and the ability to publish application events to interested event listeners. This container is defined by the `org.springframework.context.ApplicationContext` interface. The *ApplicationContext* container includes all functionality of the *BeanFactory* container, so it is generally recommended over *BeanFactory*. *BeanFactory* can still be used for lightweight applications like mobile devices or applet-based applications where data volume and speed is significant.
+
+### 2.2 **Spring Context**
 
 Spring works with Plain Old Java Objects (POJO) by making it easy to exend. We need to add a configuration to wire up all dependencies and inject what's needed to create Spring ***beans*** to execute an application.
 
 Spring Context that creates all the Spring beans using a configuration (XML or annotation or Java Config) that references all our classes which makes our application run.
 
 <img src="https://github.com/srikanthkakumanu/apis/blob/main/rest-spring/spring-context.png" width=500 height=300></img>
+
 
 ### 2.3 **Spring WebFlux**
 
@@ -57,7 +79,39 @@ With Spring Boot:
 
 - Absolutely no code generation and no requirement for XML configuration (favors *convention over configuration*).
 
-### 3.1 **Auto-Configuration**
+### 3.1 **Spring Boot features**
+
+Spring Boot is highly customizable, from the auto-configuration that sets up our application (based on the *classpath*) to customizing how it starts, what to show, and what to enable or disable based on its own properties.
+
+Some of the features below given:
+
+- Auto-configuration
+- SpringApplication class
+- SpringApplicationBuilder class
+
+There are two important Spring Boot components:
+
+**`@SpringBootApplication` annotation**: This annotation is combination of **`@ComponentScan`**, **`@Configuration`** and **`@EnableAutoConfiguration`** annotations.
+
+**SpringApplication**: This class provides the bootstrap for the Spring Boot application that is executed in the main() method. We need to pass the class that is executed.
+
+e.g.
+
+```java
+@SpringBootApplication
+public class RestApplication {
+
+	public static void main(String[] args) {
+	// SpringApplication.run(RestApplication.class, args);
+	// Or, alternative approach below
+      SpringApplication app = 
+              new SpringApplication(RestApplication.class);
+		app.run(args);
+	}
+}    
+```
+
+### 3.1.1 **Auto-Configuration**
 
 **Auto-configuration** is one of the important features in Spring Boot because it configures our Spring Boot application according to our classpath, annotations, any other configuration declarations such as JavaConfig classes or XML.
 
@@ -70,17 +124,53 @@ Spring Boot won't generate any source code but it adds some on the fly.
 
 The **`@SpringBootApplication`** annotation, which is one of the main components of a Spring Boot app. This annotation is equivalent to declaring the **`@Configuration`**, **`@ComponentScan`**, and **`@EnableAutoConfiguration`** annotations (**`@SpringBootApplication`** inherits all three).
 
+#### **Disable or exclude specific Auto-configuration**
+
 You can disable a specific auto-configuration by adding the **`exclude`** parameter by using either the **`@EnableAutoConfiguration`** or the **`@SpringBootApplication`** annotations in your class.
 
 This is a **very useful technique** when we want Spring Boot to skip certain and unnecessary auto-configurations.
 
 e.g.
 
-```
-@SpringBootApplication(exclude={ActiveMQAutoConfiguration.class,DataSourceA
-utoConfiguration.class})
+```java
+@SpringBootApplication(exclude={ActiveMQAutoConfiguration.class,DataSourceAutoConfiguration.class})
 ```
 
+#### **@EnableAutoConfiguration and @Enable(Technology) annotations**
+
+The Spring framework and some of its modules such as SpringData, SpringAMQP and SpringIntegration provide @Enable<Technology> annotations e.g. ***`@EnableTransactionManagement`***, ***`@EnableRabbit`*** and ***`@EnableIntegration`*** etc.
+
+We can use these annotations to follow the ***convention over configuration*** pattern. They help making our apps easy to develop without worrying about its configuration.
+
+As discussed above, ***@EnableAutoConfiguration*** annotation to do the auto-configuration.
+
+*spring-boot-autoconfigure-<version>.jar/META-INF/**spring.factories*** contains all the auto-configuration classes that are used to setup any configuration that our application needs for running.
+
 Useful Link: https://devwithus.com/customize-spring-boot-auto-configuration/ </br>
+
+### 3.1.2 **SpringApplication class**
+
+We can have more advanced configuration using the **`SpringApplication`** such as custom banner, banner mode etc. It allows us to configure the way our app behaves and we have control over the main **`ApplicationContext` (Spring IoC container)** where all our beans are used.
+
+### 3.1.3 **SpringApplicationBuilder class**
+
+The **`SpringApplicationBuilder`** class provides a fluent API and is a builder for the `SpringApplication` and the `ApplicationContext` instances.
+
+Using **`SpringApplicationBuilder`** we can do:
+
+- Define and run **`SpringApplication`** using **`SpringApplicationBuilder.sources()`** method. We can also get current SpringApplication instance using `application()`.
+- We can define a hierarchy when creating a Spring application using `.child()` method.
+  - If we have a web configuration, make sure that it's being declared as a child.
+  - Also parent and child must share the same `org.springframework.core.env.Environment` interface (this represents the environment in which the current application is running; it is related to profiles and properties declarations)
+- We can log the information at startup. By default it is set to true e.g. `.logStartupInfo()`.
+- We can activate/de-activate profiles e.g. `.profiles("prod", "cloud")`.
+- we can also attach listeners for some of the **`ApplicationEvent`** events. e.g. `.listeners(event -> logger.info("#### > " + event.getClass().getCanonicalName()))`. We can also have these additional events.
+  - **`ApplicationEvent`**: generic application event.
+  - **`ApplicationStartedEvent`**: This is sent at the start.
+  - **`ApplicationEnvironmentPreparedEvent`**: This is sent when the environment is known.
+  - **`ApplicationPreparedEvent`**: This is sent after the bean definitions.
+  - **`ApplicationReadyEvent`**: This is sent when the application is ready.
+  - **`ApplicationFailedEvent`**: This is sent incase of exception during the startup.
+- We can remove any web environment auto-configuration from happening. e.g. `.web(WebApplicationType.NONE)` or `.web(WebApplicationType.SERVLET)` or `.web(WebApplicationType.REACTIVE)`.
 
 </div>
