@@ -3,6 +3,7 @@ plugins {
     id 'org.springframework.boot' version '2.5.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'application'
 }
 
 group 'com.apidemo'
@@ -18,16 +19,27 @@ repositories {
 }
 
 dependencies {
-    // This dependency is used by the application.
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'org.slf4j:slf4j-api:1.7.32'
-    implementation 'org.slf4j:slf4j-simple:1.7.32'
+
+  implementation 'org.springframework.boot:spring-boot-starter-web'
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  implementation ('org.slf4j:slf4j-api:1.7.32')
+  //optional 'org.springframework.boot:spring-boot-configuration-processor'
+  //implementation ('org.slf4j:slf4j-simple:1.7.32')
+
+
+  // configurations.all {
+  //   exclude group: "org.slf4j", module: "slf4j-log4j12"
+  //   exclude group: "log4j", module: "log4j"
+  //   exclude group: "logback", module: "logback-classic"
+  // }
+  //implementation 'ch.qos.logback:logback-classic:1.2.6'
+  //implementation 'ch.qos.logback:logback-core:1.2.6'
 }
 
-test {
-  useJUnitPlatform()
-}
+// test {
+//   useJUnitPlatform()
+// }
+
 // Inform IDEs like IntelliJ IDEA, VSCode, Eclipse or NetBeans about the generated code.
 // sourceSets {
 //     main {
@@ -58,7 +70,15 @@ test {
 //   fileMode = 0755
 // }
 
-// application {
-//     // Define the main class for the application.
-//     mainClass = 'com.apidemo.grpc.HelloServer'
-// }
+compileJava.dependsOn(processResources)
+
+application {
+    // Define the main class for the application.
+    //mainClass = 'com.apidemo.rest.SimpleSpringBootApp' // simple Spring Boot app
+    //mainClass = 'com.apidemo.rest.SpringAutoConfigs' // Spring boot auto-configuration exclude and include
+    //mainClass = 'com.apidemo.rest.SpringAppBuilder' // Usage of SpringAppBuilder
+    //mainClass = 'com.apidemo.rest.SpringApplicationArgs' // Passing arguments via command line
+    //mainClass = 'com.apidemo.rest.SpringBootRunners' // usage of ApplicationRunner and CommandLineRunner
+    mainClass = 'com.apidemo.rest.ApplicationConfigParams' // application config parameters
+    mainClass = 'com.apidemo.rest.SpringBootCustomProps' // custom properties in application.properties and profile based
+}
