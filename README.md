@@ -44,7 +44,7 @@ API Documentation
 
 API Security
 
-## **What is an API**
+## 1. **What is an API**
 
 API (In short, Application Programming interface) is the interface that a software program presents to other programs or humans or world.
 
@@ -52,7 +52,7 @@ In computing terms, It is a set of functions and procedures allowing the creatio
 
 Or, It is a connection between computers or between computer programs. It is a type of software interface offering a service to other pieces of software.
 
-## **Why do we need APIs**
+## 2. **Why do we need APIs**
 
 APIs have emerged out of a need to exchange information with providers of data who are equipped to solve specific problems. APIs enable businesses to develop unique products quickly. Rather than reinventing the wheel, companies are able to differentiate their product offerings while taking advantage of existing technologies and tapping into other systems.
 
@@ -82,7 +82,7 @@ Good APIs offer:
 - hackability (ability to pickup quickly through iteration and experimentation)
 - documentation and developer resources (important to setting users up for success)
 
-## **API Design considerations**
+## 3. **API Design considerations**
 
 Key goals to consider when designing an API is:
 
@@ -96,7 +96,7 @@ Key goals to consider when designing an API is:
 
 <img src="https://github.com/srikanthkakumanu/apis/blob/main/Design_considerations.png" width=500 height=300></img> </br>
 
-## **API Paradigms**
+## 4. **API Paradigms**
 
 An API paradigm defines the interface exposing back-end data of a service to other applications. Therefore, picking the right API paradigm is important.
 
@@ -112,11 +112,11 @@ API paradigms broadly categorised into two:
   - WebSockets
   - HTTP streaming
 
-## **Request and Response APIs**
+## 5. **Request and Response APIs**
 
 Request - Response APIs typically expose an interface through HTTP based web server. APIs define set of endpoints. Clients make HTTP requests for data to those endpoints and server returns responses. The response is typically sent back as JSON or XML.
 
-## **Representational State Transfer**
+## 5.1 **Representational State Transfer**
 
 REST is an architectural style and it is most popular choice for API development. REST is all about resources. A resource is an entity that can be identified, named, addressed or handled on the web. REST APIs expose data as resources and use standard HTTP methods to represent CRUD (Create, Read, Update and Delete) transactions against these resources. e.g. users, customers, charges, balance, events, orders etc.
 
@@ -173,7 +173,7 @@ General rules for REST APIs:
 
 **Best fit:** REST is best for APIs that expose CRUD like operations. It is best fit for APIs that focus on objects or resources, many varied clients, discoverability and documentation.
 
-## **Remote Procedure Call**
+## 5.2 **Remote Procedure Call**
 
 Remote Procedure Call (RPC) is one of the simplest API paradigms in which a client executes a block of code on another server.
 
@@ -202,7 +202,7 @@ It may be a good fit when we have tons of micro services and communicates heavil
 
 **Best fit:** RPC is best for APIs exposing several actions. It is best fit for action oriented and simple interactions, internal micro services where it offers high message rate and low overhead.
 
-## **GraphQL**
+## 5.3 **GraphQL**
 
 GraphQL is a query language for APIs that has gained significant focus recently. GraphQL allows clients to define the structure of data required and server returns exactly that structure.
 
@@ -233,7 +233,7 @@ GraphQL combines some ideas of RPC and REST.
 
 **Best fit:** GraphQL APIs are best when we need querying flexibility. It is best fit for data or mobile client APIs and data is graph-like, optimize for high latency.
 
-## **Request __ Response APIs Summary**
+## 5.4 **Request __ Response APIs Summary**
 
 |  |REST  |RPC  |GraphQL  |
 |---------|---------|---------|---------|
@@ -245,19 +245,19 @@ GraphQL combines some ideas of RPC and REST.
 |**Cons**     |– Big payloads</br>– Multiple HTTP round-trips         |– Discovery is difficult </br> – Limited standardisation </br>– Can lead to function explosion         |– Requires additional query parsing </br>– Back-end performance optimisation is difficult </br>– Too complicated for simple APIs         |
 |**When to use?**     |For APIs doing CRUD like operations         |For APIs exposing several actions         |When we need querying flexibility; great for providing querying flexibility and maintaining consistency         |
 
-## **Event Driven APIs**
+## 6. **Event Driven APIs**
 
 To share data about events real time. An event-driven architecture consists of ***event producers*** that generate a stream of events, and ***event consumers*** that listen for the events.
 
 In case of Request - Response APIs, for services with constantly changing data, the response can quickly become stale. Developers who want to stay up to date with the changes in data often end up polling the API. With ***polling***, developers constantly query API endpoints at a predetermined frequency and look for new data. If developers poll at a ***low frequency***, their apps will not have data about all the events (like a resource being created, updated, or deleted) that occurred since the last poll. However, polling at a ***high frequency*** would lead to a huge waste of resources, as most API calls will not return any new data.
 
-## **Polling approach and its limitations**
+## 6.1 **Polling approach and its limitations**
 
 In case of Request - Response APIs, for services with constantly changing data, the response can quickly become stale. Developers who want to stay up to date with the changes in data often end up polling the API.
 
 With **polling**, developers constantly query API endpoints at a predetermined frequency and look for new data. If developers poll at a ***low frequency***, their apps will not have data about all the events (like a resource being created, updated, or deleted) that occurred since the last poll. However, polling at a ***high frequency*** would lead to a huge waste of resources, as most API calls will not return any new data.
 
-## **WebHooks**
+## 6.2 **WebHooks**
 
 A WebHook is a URL that accepts an HTTP POST (or GET/PUT/DELETE). An API provider implementing WebHooks will simply POST a message to the configured URL when something happens.
 
@@ -270,7 +270,7 @@ WebHooks adds **some complexities:**
 - **Firewalls:** Applications running behind firewalls can access APIs over HTTP, but they are unable to receive inbound traffic. For such applications, utilizing WebHooks is difficult and often not possible.
 - **Noise:** Typically each WebHook represents one single event. When there are thousands of events, happening in a short time that need to be sent via single WebHook, it can be noisy.
 
-## **WebSocket**
+## 6.3 **WebSocket**
 
 WebSocket is a protocol used to establish a two-way streaming communication channel over a single TCP connection. Although the protocol is generally used between a client and a server, sometimes it is used for server-to-server communication as well.
 
@@ -281,7 +281,7 @@ WebSockets have **some complexities:**
 - **Spotty connections:** WebSockets on mobile devices or in regions where connectivity can be spotty. Clients are supposed to keep connections alive. If connection dies, the client needs to re-initiate it.
 - **Scalability:** Developers using a WebSocket API must establish a connection for each team that uses their app. This means if the app is installed on 5,000 devices, the developers would be responsible for maintaining 5,000 connections between their servers and apps.
 
-## **HTTP Streaming**
+## 6.4 **HTTP Streaming**
 
 With HTTP request – response APIs, clients send an HTTP request and the server returns a HTTP response of a finite length. Now there is a possibility to make the length of this **response indefinite**.
 
@@ -297,7 +297,7 @@ HTTP streaming is easy to consume but there are **few complexities** such as:
 - **Buffering:** Clients and proxies often have buffer limits. They might not start rendering the data to application until a threshold is met.
 - **Frequent changes and re-connections:** If clients want to frequently change what kind of events they listen to, HTTP streaming may not be an ideal because it requires re-connections.
 
-## **Event driven APIs Summary**
+## 6.5 **Event driven APIs Summary**
 
 |  |WebHooks  |WebSockets  |HTTP streaming  |
 |---------|---------|---------|---------|
@@ -307,13 +307,52 @@ HTTP streaming is easy to consume but there are **few complexities** such as:
 |**Drawbacks**     |– Do not work across firewalls or in browsers</br> – Handling failures, retries, security is hard.         |– Need to maintain a persistant connection</br> – Not HTTP         |– Bi-directional communication is difficult</br> – Reconnections required to receive different events         |
 |**When to use?**     |To trigger the server to serve real-time events         |For Two-way, real-time communication between browsers and servers         |For one-way communication over simple HTTP         |
 
-## **API Documentation**
-
----
+## 7. **API Documentation**
 
 We can use markup languages such as reStructuredText and Markdown. For simple cases, we can rely on https://readthedocs.io or GitHub pages.
 
-## **API Security**
+## 8. **API Security**
+
+Security is a critical element of any web application. To ensure that an application is secure there are many things that we need to do such as:
+
+- Input validation
+- Using SSL everywhere
+- validating content-types
+- maintaining audit logs
+- protect against cross-site request forgery (CSRF)
+- protect against cross-site scripting (XSS)
+
+Beyond the above, there are some more web application security practices and techniques which have to be applied when we expose web APIs to outside world.
+
+### 8.1 **Authentication and Authorization**
+
+**Authentication** and **Authorization** are two foundational elements of security.
+
+- **Authentication**: The process of verifying who you are. Web applications accomplish this by asking user to login with a username and password to ensure the request is authentic.
+- **Authorization**: The process of verifying that you are permitted to do what you are trying to do.
+
+#### 8.1.1 **Basic authentication**
+
+Its the simplest technique used to enfore access control on the web. The clients send HTTP requests with an **`Authorization`** header which consists of the word **"Basic"** followed by a space and a string generated by combining username and password with a colon (*username:password*) and encoding it with base64.
+
+e.g. `Authorization: Basic dXNlcjpwYXNzd29yZA==`
+
+But it offers least amount of security. If you use Basic Authentication for your API, to use a third-party developer’s application, your users might need to share their username and password credentials with them. That has several disadvantages.
+
+- Applications are required to store these credentials in clear text or in a way that they can decrypt them.
+- Users cannot revoke access to a single application without revoking access to all the applications by changing the password.
+- Applications get full access to user accounts. Users cannot limit access to selected resources.
+
+#### 8.1.2 **oAuth**
+
+To address issues faced by Basic Authentication and other prevalent authentication and authorization mechanisms, **OAuth** was introduced in 2007.
+
+**OAuth** is an open standard that allows users to grant access to applications **without sharing passwords** with them. The second benefit of OAuth is that it allows API providers’ users to **grant selective permission**. Each application has different requirements of what data it needs from an API provider. The OAuth framework allows API providers to grant access to one or more resources.
+
+
+
+
+
 
 
 </div>
