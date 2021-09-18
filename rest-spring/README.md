@@ -324,10 +324,157 @@ e.g.
 
 Spring Boot allows you to write and use your own custom properties prefix for your properties by using `@Component` and `@ConfigurationProperties` annotation in a Java class which has setters and getters as its properties.
 
-## 4. **Web Applications with Spring Boot** offers
+## 4. **Web Applications with Spring Boot**
 
+The spring framework offers **`spring-web`**, **`spring-webmvc`**, **`spring-webflux`** and **`spring-websocket`** modules to support web technology.
+
+The **`spring-web`** module has basic web integration features such as:
+
+- Multi-part file upload functionality.
+- Initialization of of Spring container (by using Servlet listeners).
+- A web oriented application context.
+
+### 4.1 **Spring MVC**
+
+The **`spring-mvc`** module (a.k.a the web server) has features such as:
+
+- Spring MVC (Model-View-Controller)
+- RESTful services implementation for web applications
+
+#### **DispatcherServlet**
+
+The **Spring MVC** module is designed around the **`org.springframework.web.servlet.DispatcherServlet`** class. This servlet is very flexible and has a very robust functionality. With the **`DispatcherServlet`**, you have several out-of-the-box resolutions strategies, including view resolvers, locale resolvers, theme resolvers, and exception handlers. In other words, the **`DispatcherServlet`** take a HTTP request and redirect it to the right handler (the class marked with the `@Controller` or `@RestController` and the methods that use the `@RequestMapping` annotations) and the right view (your JSPs).
+
+#### **Controller Annotations**
+
+Spring MVC offers **`@Controller`** and **`@RestController`** annotations to express request mappings, request input, exception handling and more.
+
+**`@Controller`**:
+
+- `@Controller` is used to mark a class as controller class and it indicates that class as web controller.
+- It is simply a specialization of the `@Component` (allows us to auto-detect implmentation classes through the classpath scanning).
+- We typically use `@Controller` in combination with a `@RequestMapping` annotation for request handling methods.
+- It need to be declared with **`@ResponseBody`** explicitly to deal with responses when needed.
+- It creates a Map of Model objects and finds a view.
+
+e.g.
+
+```java
+@Controller
+@RequestMapping("todo")
+public class ToDoController {
+
+    @GetMapping("/{id}", produces = "application/json")
+    public @ResponseBody ToDo getToDo(@PathVariable int id) {
+        return findToDoById(id);
+    }
+
+    private ToDo findToDoById(int id) {
+        // ...
+    }
+}
+```
+
+**Note**: We annotated the request handling method with `@ResponseBody`. This annotation enables automatic serialization of the return object into the HttpResponse.
+
+**`@RestController`**:
+
+- Spring 4.0 introduced this annotation to simplify the creation of RESTful web services. 
+- It combines **`@Controller`** *+* **`@ResponseBody`**, meaning we do not need to use `@ResponseBody` explicitly on every handler method once we annotate the class with `@RestController`. 
+- It simply returns an object (i.e. object data directly written into HTTP response as JSON or XML).
+
+e.g.
+
+```java
+@RestController
+@RequestMapping("todo")
+public class ToDoRestController {
+    
+    @GetMapping("/{id}", produces = "application/json")
+    public ToDo getToDo(@PathVariable int id) {
+        return findToDoById(id);
+    }
+
+    private ToDo findToDoById(int id) {
+        // ...
+    }
+}
+```
+
+**Note**: The controller is annotated with the `@RestController` annotation. Therefore `@ResponseBody` isn't required. Every request handling method of the controller class automatically serializes return objects into `HttpResponse`.
+
+#### **Other Annotations**
+
+**@Autowired**:
+
+@Autowired meaning it injects an implementation (see below: injects CommonRepository<ToDo> implementation object). However, it can be omitted. Spring automatically injects any declared dependency since 4.3.
+
+e.g.
+
+```java
+@Autowired  
+public ToDoController(CommonRepository<ToDo> repository) { 
+  this.repository = repository; 
+}
+```
+
+**@GetMapping**:
+
+It is a shortcut version of @RequestMapping and is equivalent to
+`@RequestMapping(value="/todo", method={RequestMethod.GET})`.
+
+**@PathVariable**:
+
+It helps in declaring an endpoint that contains a URL expression.
+e.g. */api/todo/{id}*
+*Note*: ID must match the name of the method parameter.
+
+**@RequestBody**:
+
+It sends a request with a body. When a form or a particular content is submitted, this class receives a JSON format of model/POJO object (e.g. todo as shown below). Then **`HttpMessagerConverter`** de-serializes the JSON into relevant model/POJO instance. Spring Boot automatically performs this operation with the help of auto-configuration because it registers the `MappingJackson2HttpMessageConverter` by default.
+
+e.g.
+
+```java
+public ResponseEntity<?> createToDo(
+                            @Valid @RequestBody ToDo todo, 
+                            Errors errors) { ... }
+```
+
+**@Valid**:
+
+This annotation validates incoming data and is used as a method’s parameters (see above code example).
+
+To trigger a validator, it is necessary to annotate the data we want to validate with `@NotNull`, `@NotBlank` and other annotations. If the validator finds errors, they are collected in the `Errors` class.  Then we can inspect and add the necessary logic to send back an error response.
+
+**@ResponseEntity<E>**:
+
+This class returns a full response, including HTTP headers, and the body is converted through `HttpMessageConverters` and written to the HTTP response. It supports a *fluent API* therefore it is easy to create the response.
+
+**@ResponseStatus**:
+
+ This annotation is normally used when a method has a *void* return type (or *null* return value). This annotation sends back the HTTP status code specified in the response.
+
+**@ExceptionHandler**:
+
+ The Spring MVC automatically declares built-in resolvers for exceptions and adds the support to this annotation.
+
+ We can use this annotation inside a controller class or can also be used within a `@ControllerAdvice` interceptor and any exception is redirected to the `handleException()' method.
 
 ## **Important Commands**
 
+**CURL**
 
+curl -s http://localhost:8080/api/todo | jq (jq is a tool for JSON format viewing - sudo apt install jq)
+curl -i -X POST -H "Content-Type: application/json" -d '{"description": "Practice Hard Dont stop"}' http://localhost:8080/api/todo
+
+curl -i -H PUT -H "Content-Type: application/json" -d '{"description": "Take the dog and the cat for a walk", "id": "178424c8-675d-479d-9130-137c57672faf"}' http://localhost:8080/api/todo
+
+curl -i -X PATCH http://localhost:8080/api/todo/178424c8-675d-479d-9130-137c57672faf
+
+curl -i -X DELETE http://localhost:8080/api/todo/f0ee14cd-b43a-4676-bd4a-6c4cd396a069
+
+To test validations
+curl -i -X POST -H "Content-Type: application/json" -d '{"description":""}' http://localhost:8080/api/todo
+curl -i -X POST -H "Content-Type: application/json" http://localhost:8080/api/todo
 </div>

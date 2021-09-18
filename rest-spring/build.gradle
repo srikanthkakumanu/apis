@@ -13,6 +13,13 @@ description = "First Spring Boot Application"
 sourceCompatibility = '11'
 targetCompatibility = '11'
 
+configurations {
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+// to customize web server from tomcat to jetty/undertow/netty  
+//  compile.exclude module: "spring-boot-starter-tomcat"
+}
 repositories {
   mavenCentral()
   mavenLocal()
@@ -20,12 +27,27 @@ repositories {
 
 dependencies {
 
+  // spring boot Web MVC
   implementation 'org.springframework.boot:spring-boot-starter-web'
-  testImplementation 'org.springframework.boot:spring-boot-starter-test'
-  implementation ('org.slf4j:slf4j-api:1.7.32')
-  //optional 'org.springframework.boot:spring-boot-configuration-processor'
-  //implementation ('org.slf4j:slf4j-simple:1.7.32')
 
+  // to change from spring web to spring webflux. comment above spring-boot-starter-web and add below line
+  // that will also pull in spring-boot-starter-reactor-netty as transitive dependency
+  // implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+  // to customize web server from tomcat to jetty/undertow
+  // compile("org.springframework.boot:spring-boot-starter-jetty")
+  // compile("org.springframework.boot:spring-boot-starter-undertow")
+
+  // Java Bean validation
+  implementation 'org.springframework.boot:spring-boot-starter-validation'
+  // Logging Facade
+  implementation ('org.slf4j:slf4j-api:1.7.32')
+  // Lombok: Code Generation Annotation Library
+  compileOnly 'org.projectlombok:lombok'
+  // Gradle Annotatio Processor using Lombok annotation processor
+  annotationProcessor 'org.projectlombok:lombok'
+  // 
+  testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
   // configurations.all {
   //   exclude group: "org.slf4j", module: "slf4j-log4j12"
@@ -74,11 +96,13 @@ compileJava.dependsOn(processResources)
 
 application {
     // Define the main class for the application.
-    //mainClass = 'com.apidemo.rest.SimpleSpringBootApp' // simple Spring Boot app
-    //mainClass = 'com.apidemo.rest.SpringAutoConfigs' // Spring boot auto-configuration exclude and include
-    //mainClass = 'com.apidemo.rest.SpringAppBuilder' // Usage of SpringAppBuilder
-    //mainClass = 'com.apidemo.rest.SpringApplicationArgs' // Passing arguments via command line
-    //mainClass = 'com.apidemo.rest.SpringBootRunners' // usage of ApplicationRunner and CommandLineRunner
-    mainClass = 'com.apidemo.rest.ApplicationConfigParams' // application config parameters
-    mainClass = 'com.apidemo.rest.SpringBootCustomProps' // custom properties in application.properties and profile based
+    //mainClass = 'com.apidemo.rest.apps.SimpleSpringBootApp' // simple Spring Boot app
+    //mainClass = 'com.apidemo.rest.apps.SpringAutoConfigs' // Spring boot auto-configuration exclude and include
+    //mainClass = 'com.apidemo.rest.apps.SpringAppBuilder' // Usage of SpringAppBuilder
+    //mainClass = 'com.apidemo.rest.apps.SpringApplicationArgs' // Passing arguments via command line
+    //mainClass = 'com.apidemo.rest.apps.SpringBootRunners' // usage of ApplicationRunner and CommandLineRunner
+    //mainClass = 'com.apidemo.rest.apps.ApplicationConfigParams' // application config parameters
+    //mainClass = 'com.apidemo.rest.apps.SpringBootCustomProps' // custom properties in application.properties and profile based
+
+    mainClass = 'com.apidemo.rest.ToDoApplication'
 }
