@@ -1,13 +1,67 @@
+// All Jenkins environment variables are listed in : http://ip-addr:postno/env-vars.html
+// CODE_CHANGES = getCodeChanges() // groovy method script to check for code changes
 pipeline {
     // agent {
     //     label "any"
     // }
     agent any
-    
+
+    // 1. environment variables
+    // we can define additional environment variables
+    // environment {
+    //     NEW_VERSION = '1.3.0' // just a sample
+    //     // we can also extract server credentials (after settingup in jenkins server using credentials binding plugin)
+    //     SERVER_CREDENTIALS = credentials('id') // id is reference of server credentials what u setup in jenkins 
+    // }
+
+    // 2. Using tools
+    // access build tools for your project (u need to setup tool names in Global tools configuration in jenkins)
+    // tools {
+    //     maven 'Maven' // name of tool what u setup in Global tools configuration
+    //     gradle 'Gradle' // name of tool what u setup in Global tools configuration
+    // }
+
+    // 3. Declare parameters
+    // we can define parameters in Jenkinsfile - useful in want to use external configuration to ur build
+    // parameters {
+    //     string(name: 'VERSION', defaultValue: '', description: 'version to deploy on prod')
+    //     // Or, you can have choice
+    //     choice(name: 'VERSION', choices: ['1.1.0', '1.2.0'], description: '')
+    //     // Or, you can also have boolean
+    //     booleanParam(name: 'executeTests', defaultValue: true , description: '')
+    // }
+
+    // 4. Using external Groovy script
+    // Using a script block
+
+
     stages {
         stage("build") {
+            // condition for this stage execution only when branch is dev and code is changed.
+            // when {
+            //     expression {
+            //         params.executeTests // or params.executeTests == true
+            //         BRANCH_NAME == 'dev' && CODE_CHANGES = true
+            //     }
+            // }
+
+            // external script (groovy)
+            // script {
+            //     // write groovy code
+            //     // sample external groovy script code
+            //     /* 
+            //         def function() {
+            //             echo 'deploying the application'
+            //         }
+            //         return this // this statement is important otherwise it won't return back to jenkinsfile
+            //     */
+
+            // }
+            
             steps{
                 echo "========building the application========"
+                // echo "building version $NEW_VERSION" // or ${NEW_VERSION}
+                sh "gradle build"
             }
             post {
                 always {
@@ -23,7 +77,14 @@ pipeline {
         }
 
         stage("test") {
-            steps{
+            // condition for this stage execution only when branch is dev or main
+            // when {
+            //     expression {
+            //         // environment varibale of branch name: BRANCH_NAME or env.BRANCH_NAME
+            //         BRANCH_NAME == 'dev' || BRANCH_NAME == 'main'
+            //     }
+            // }
+            steps {
                 echo "========testing the application========"
             }
             post {
