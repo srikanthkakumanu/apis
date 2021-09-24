@@ -55,9 +55,9 @@ public class SpringAppBuilder {
 		// 	});
         
         // customize banner programmatically in functional way
-		app.setBanner((environment, sourceClass, out) -> { 
-			out.print("\n\n\tThis is my own banner!\n\n".toUpperCase()); 
-		});
+		app.setBanner((environment, sourceClass, out) ->  
+			out.print("\n\n\tThis is my own banner!\n\n".toUpperCase())
+		);
 		// app.setBannerMode(Banner.Mode.OFF);
 		app.run(args);
 	}
@@ -75,9 +75,9 @@ public class SpringAppBuilder {
         SpringApplication app = builder.application();
         
         // customize banner programmatically in functional way
-		app.setBanner((environment, sourceClass, out) -> { 
-			out.print("\n\n\tThis is my own banner!\n\n".toUpperCase()); 
-		});
+		app.setBanner((environment, sourceClass, out) ->  
+			out.print("\n\n\tThis is my own banner!\n\n".toUpperCase())
+        );
 		// app.setBannerMode(Banner.Mode.OFF);
         // app.setBannerMode(Banner.Mode.CONSOLE);
         // app.setBannerMode(Banner.Mode.LOG);
