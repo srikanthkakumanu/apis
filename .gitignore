@@ -1,3 +1,13 @@
 
 graphql-dgs
 .vscode
+.gradle
+
+bin
+build
+gradle
+
+.classpath
+.project
+.project
+.settings
