@@ -7,7 +7,6 @@ pipeline {
         stage("build") {
             steps{
                 echo "========building the application========"
-                gradle clean build
             }
             post {
                 always {
@@ -25,7 +24,6 @@ pipeline {
         stage("test") {
             steps{
                 echo "========testing the application========"
-                gradle test
             }
             post {
                 always {
@@ -43,7 +41,6 @@ pipeline {
         stage("deploy") {
             steps{
                 echo "========deploy the application========"
-                gradle bootRun
             }
             post {
                 always {
