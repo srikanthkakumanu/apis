@@ -1,4 +1,4 @@
-package com.apidemo.rest;
+package com.apidemo.rest.apps;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

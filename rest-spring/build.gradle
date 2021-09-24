@@ -59,6 +59,15 @@ dependencies {
   //implementation 'ch.qos.logback:logback-core:1.2.6'
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs 'src/main/java'
+        }
+    }
+}
+
+
 // test {
 //   useJUnitPlatform()
 // }
