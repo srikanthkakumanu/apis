@@ -57,10 +57,11 @@ pipeline {
             //     */
 
             // }
-            
+
             steps{
                 echo "========building the application========"
                 // echo "building version $NEW_VERSION" // or ${NEW_VERSION}
+                echo "executing gradle command to build project..."
                 sh "gradle build"
             }
             post {
