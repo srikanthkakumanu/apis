@@ -1,0 +1,70 @@
+pipeline {
+    agent {
+        label "any"
+    }
+
+    stages {
+        stage("build") {
+            steps{
+                echo "========building the application========"
+            }
+            post {
+                always {
+                    echo "========build-always========"
+                }
+                success {
+                    echo "========build executed successfully========"
+                }
+                failure {
+                    echo "========build execution failed========"
+                }
+            }
+        }
+
+        stage("test") {
+            steps{
+                echo "========testing the application========"
+            }
+            post {
+                always {
+                    echo "========test-always========"
+                }
+                success {
+                    echo "========test executed successfully========"
+                }
+                failure {
+                    echo "========test execution failed========"
+                }
+            }
+        }
+
+        stage("deploy") {
+            steps{
+                echo "========deploy the application========"
+            }
+            post {
+                always {
+                    echo "========deploy-always========"
+                }
+                success {
+                    echo "========deploy executed successfully========"
+                }
+                failure {
+                    echo "========deploy execution failed========"
+                }
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo "========pipeline-always========"
+        }
+        success {
+            echo "========pipeline executed successfully ========"
+        }
+        failure {
+            echo "========pipeline execution failed========"
+        }
+    }
+}
