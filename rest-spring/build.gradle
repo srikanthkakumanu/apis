@@ -2,8 +2,10 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'org.springframework.boot' version '2.5.4'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-//    id 'java'
+    // id 'java'
     id 'application' // application plugin adds java plugin automatically
+    // axion: Gradle release and version management plugin
+    id 'pl.allegro.tech.build.axion-release' version '1.13.3'
 }
 
 group 'com.apidemo'
@@ -17,7 +19,7 @@ configurations {
   compileOnly {
     extendsFrom annotationProcessor
   }
-// to customize web server from tomcat to jetty/undertow/netty  
+// to customize web server from tomcat to jetty/undertow/netty
 // compile.exclude module: "spring-boot-starter-tomcat"
 }
 
@@ -45,18 +47,18 @@ dependencies {
   implementation ('org.slf4j:slf4j-api:1.7.32')
   // Lombok: Code Generation Annotation Library
   compileOnly 'org.projectlombok:lombok'
-  // Gradle Annotatio Processor using Lombok annotation processor
+  // Gradle Annotation Processor using Lombok annotation processor
   annotationProcessor 'org.projectlombok:lombok'
-  // 
+  // Spring Test
   testImplementation 'org.springframework.boot:spring-boot-starter-test'
+  // Spring JDBC
+  implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 
-  // configurations.all {
-  //   exclude group: "org.slf4j", module: "slf4j-log4j12"
-  //   exclude group: "log4j", module: "log4j"
-  //   exclude group: "logback", module: "logback-classic"
-  // }
-  //implementation 'ch.qos.logback:logback-classic:1.2.6'
-  //implementation 'ch.qos.logback:logback-core:1.2.6'
+  // postgreSQL
+  runtimeOnly 'org.postgresql:postgresql'
+  // DB migration tool FlywayDB
+  implementation 'org.flywaydb:flyway-core'
+
 }
 
 sourceSets {

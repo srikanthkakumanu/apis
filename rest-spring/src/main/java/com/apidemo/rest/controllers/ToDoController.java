@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.apidemo.rest.repos.CommonRepository;
+import com.apidemo.rest.service.ToDoService;
 import com.apidemo.rest.validation.ToDoValidationErrorBuilder;
 import com.apidemo.rest.validation.ToDoValidationError;
 
@@ -32,19 +32,19 @@ import org.slf4j.LoggerFactory;
 
 
 @RestController
-@RequestMapping("/api") // meaning that all the methods have this /api prefix. e.g. /api/todo/{id}
+@RequestMapping("/api")
 public class ToDoController {
     private static final Logger log = LoggerFactory.getLogger(ToDoController.class.getCanonicalName());
-    private CommonRepository<ToDo> repository;
+    private ToDoService service;
 
     /**
-     * @Autowired meaning it injects CommonRepository<ToDo> implementation.
+     * @Autowired meaning it injects ToDoService<ToDo> implementation.
      * However, it can be omitted. Spring automatically injects any declared
      * dependency since 4.3.
      * @param repository
      */
     @Autowired  
-    public ToDoController(CommonRepository<ToDo> repository) { this.repository = repository; }
+    public ToDoController(ToDoService service) { this.service = service; }
 
     /**
      * GET: Returns all ToDo's
@@ -53,7 +53,7 @@ public class ToDoController {
     @GetMapping("/todo")
     public ResponseEntity<Iterable<ToDo>> getToDos() {
         log("/todo", "GET", "getToDos() called"); 
-        return ResponseEntity.ok(repository.findAll());
+        return ResponseEntity.ok(service.getToDos());
     }
 
     /**
@@ -72,7 +72,7 @@ public class ToDoController {
     @GetMapping("/todo/{id}")
     public ResponseEntity<ToDo> getToDoById(@PathVariable String id) {
         log("/todo/{id}", "GET", "getToDoById() called");
-        return ResponseEntity.ok(repository.findById(id));
+        return ResponseEntity.ok(service.getToDoById(id));
     }
 
     /**
@@ -83,9 +83,9 @@ public class ToDoController {
     @PatchMapping("/todo/{id}")
     public ResponseEntity<ToDo> setCompleted(@PathVariable String id) {
         log("/todo/{id}", "PATCH", "setCompleted() called");
-        ToDo result = repository.findById(id);
+        ToDo result = service.getToDoById(id);
         result.setCompleted(true);
-        repository.save(result);
+        service.saveToDo(result);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                                                 .buildAndExpand(result.getId())
@@ -106,7 +106,7 @@ public class ToDoController {
             return ResponseEntity.badRequest()
                                 .body(ToDoValidationErrorBuilder.fromBindingErrors(errors));
         
-        ToDo result = repository.save(todo);
+        ToDo result = service.saveToDo(todo);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                                                 .buildAndExpand(result.getId()).toUri();
         return ResponseEntity.created(location).build();
@@ -120,7 +120,9 @@ public class ToDoController {
     @DeleteMapping("/todo/{id}")
     public ResponseEntity<ToDo> deleteToDo(@PathVariable String id) {
         log("/todo/{id}", "DELETE", "deleteToDo(id) called");
-        repository.delete(ToDoBuilder.create().withId(id).build());
+        
+        //service.deleteToDo(ToDoBuilder.create().withId(id).build());
+        service.deleteToDo(id);
         return ResponseEntity.noContent().build();
     }
 
@@ -132,7 +134,7 @@ public class ToDoController {
     @DeleteMapping("/todo")
     public ResponseEntity<ToDo> deleteToDo(@RequestBody ToDo todo) {
         log("/todo", "DELETE", "deleteToDo(ToDo) called");
-        repository.delete(todo);
+        service.deleteToDo(todo);
         return ResponseEntity.noContent().build();
     }
 

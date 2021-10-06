@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  # rest-spring:
+  #   image: rest-spring:latest
+  #   depends_on:
+  #     - postgres
+  #   build: ./Dockerfile
+  #   ports:
+  #     - '9001:8080'
+  #   networks:
+  #     - spring-app
+      
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: srikanth
+      POSTGRES_PASSWORD: srikanth
+      POSTGRES_DB: postgres
+      PGDATA: /data/postgres
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - 5432:5432
+    networks:
+      - spring-app
+    restart: unless-stopped
+  
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin:/var/lib/pgadmin
+    ports:
+      - 5050:80
+    networks:
+      - spring-app
+    restart: unless-stopped
+
+networks:
+  spring-app:
+    driver: bridge
+
+volumes:
+  postgres:
+  pgadmin:  

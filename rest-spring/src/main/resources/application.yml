@@ -1,0 +1,22 @@
+app:
+    datasource:
+        main:
+            driver-class-name: org.postgresql.Driver
+            jdbc-url: jdbc:postgresql://localhost:5432/srikanth
+            username: srikanth
+            password: 'srikanth'
+            pool-size: 30
+
+server:
+    http2:
+        enabled: true
+    error:
+        include-binding-errors: always
+        include-message: always
+
+spring:
+    jackson:
+        date-format: yyyy-MM-dd HH:mm:ss
+        time-zone: MST7MDT
+
+

@@ -463,18 +463,27 @@ This class returns a full response, including HTTP headers, and the body is conv
 
 ## **Important Commands**
 
-**CURL**
+**CURL commands:**
 
-curl -s http://localhost:8080/api/todo | jq (jq is a tool for JSON format viewing - sudo apt install jq)
-curl -i -X POST -H "Content-Type: application/json" -d '{"description": "Practice Hard Dont stop"}' http://localhost:8080/api/todo
+GET request: `curl -s http://localhost:8080/api/todo | jq` (jq is a tool for JSON format viewing - sudo apt install jq)
+POST request: `curl -i -X POST -H "Content-Type: application/json" -d '{"description": "Practice Hard Dont stop"}' http://localhost:8080/api/todo`
 
-curl -i -H PUT -H "Content-Type: application/json" -d '{"description": "Take the dog and the cat for a walk", "id": "178424c8-675d-479d-9130-137c57672faf"}' http://localhost:8080/api/todo
+PUT request: `curl -i -H PUT -H "Content-Type: application/json" -d '{"description": "Take the dog and the cat for a walk", "id": "178424c8-675d-479d-9130-137c57672faf"}' http://localhost:8080/api/todo`
 
-curl -i -X PATCH http://localhost:8080/api/todo/178424c8-675d-479d-9130-137c57672faf
+PATCH request: `curl -i -X PATCH http://localhost:8080/api/todo/178424c8-675d-479d-9130-137c57672faf`
 
-curl -i -X DELETE http://localhost:8080/api/todo/f0ee14cd-b43a-4676-bd4a-6c4cd396a069
+DELETE request: `curl -i -X DELETE http://localhost:8080/api/todo/f0ee14cd-b43a-4676-bd4a-6c4cd396a069`
 
-To test validations
-curl -i -X POST -H "Content-Type: application/json" -d '{"description":""}' http://localhost:8080/api/todo
-curl -i -X POST -H "Content-Type: application/json" http://localhost:8080/api/todo
+To test validations:
+`curl -i -X POST -H "Content-Type: application/json" -d '{"description":""}' http://localhost:8080/api/todo`
+`curl -i -X POST -H "Content-Type: application/json" http://localhost:8080/api/todo`
+
+**Docker commands:**
+To start/stop application via docker-compose: `docker-compose up` and `docker-compose down`
+
+To Know IP address of a docker container: `docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container id or name>`
+
+To login to Docker container: `docker exec -it <container id or name> /bin/bash`
+
+
 </div>
